@@ -1,0 +1,30 @@
+.movie-page {
+    background-color: #CADCFC;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    min-height: 100vh;
+  }
+  
+  .movie-card-custom {
+    background-color: #3561ac;
+    border-radius: 30px;
+    transition: transform 0.3s ease;
+  }
+  
+  .movie-card-custom:hover {
+    transform: scale(1.03);
+  }
+  
+  .movie-poster {
+    height: 300px;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+  
+  .card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
