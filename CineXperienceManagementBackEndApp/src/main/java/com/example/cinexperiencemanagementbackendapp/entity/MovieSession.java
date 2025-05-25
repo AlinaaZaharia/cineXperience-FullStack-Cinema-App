@@ -1,6 +1,7 @@
 package com.example.cinexperiencemanagementbackendapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -17,9 +18,15 @@ public class MovieSession {
     private int id;
 
     @JsonProperty("movie")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
+
+    @ManyToOne
+    @JoinColumn(name = "city_id", nullable = false)
+    @JsonProperty("city")
+    private City city;
+
 
     @JsonProperty("hallName")
     @Column(name = "hall_name", nullable = false)
@@ -43,8 +50,6 @@ public class MovieSession {
         this.seats = seats;
         this.startTime = startTime;
     }
-
-    // Getters & Setters
 
     public int getId() {
         return id;

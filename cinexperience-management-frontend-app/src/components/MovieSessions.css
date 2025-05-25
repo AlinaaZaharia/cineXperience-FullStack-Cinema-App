@@ -1,0 +1,20 @@
+.movie-image img {
+    max-width: 100%; /* Lăsăm imaginea să se redimensioneze pentru a se potrivi în container */
+    height: auto;    /* Menținem raportul de aspect al imaginii */
+    max-height: 500px; /* Limitează înălțimea imaginii la o valoare fixă (poți ajusta această valoare) */
+}
+
+.movie-details {
+    margin-left: 20px;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.card-body div {
+    margin-right: 20px;
+}

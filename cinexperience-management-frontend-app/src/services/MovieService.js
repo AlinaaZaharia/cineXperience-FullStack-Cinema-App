@@ -11,16 +11,16 @@ class MovieService{
         return axios.get(BASE_API + "/viewmovie/" + id);
     }
 
-    updateMovie(id, movie) {
-        return axios.put(BASE_API + "/updatemovie/" + id, movie);
+    updateMovie(id, movie, userId) {
+        return axios.put(`http://localhost:9000/api/cinema/updatemovie/${id}?userId=${userId}`, movie);
     }
 
-    deleteMovie(id){
-        return axios.delete(BASE_API + "/deletemovie/" + id);
+    deleteMovie(id, userId) {
+        return axios.delete(`http://localhost:9000/api/cinema/deletemovie/${id}?userId=${userId}`);
     }
-    
-    insertMovie(movie){
-        return axios.post(BASE_API + "/insert", movie);
+
+    insertMovie(movie, userId) {
+        return axios.post(`http://localhost:9000/api/cinema/insert?userId=${userId}`, movie);
     }
 }
 

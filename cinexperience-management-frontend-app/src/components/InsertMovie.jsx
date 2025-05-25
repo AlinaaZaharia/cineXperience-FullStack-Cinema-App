@@ -2,16 +2,18 @@ import React, { Component } from 'react';
 import MovieService from '../services/MovieService';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 class InsertMovie extends Component {
     constructor(props) {
         super(props);
+        const user = JSON.parse(localStorage.getItem("loggedUser")) || {};
+
         this.state = {
             title: '',
             description: '',
             genres: '',
             duration: '',
-            posterUrl: ''
+            posterUrl: '',
+            user: user
         };
 
         this.changeTitleHandler = this.changeTitleHandler.bind(this);
@@ -21,6 +23,14 @@ class InsertMovie extends Component {
         this.changePosterUrlHandler = this.changePosterUrlHandler.bind(this);
         this.saveMovie = this.saveMovie.bind(this);
         this.cancel = this.cancel.bind(this);
+    }
+
+    componentDidMount() {
+        // Dacă userul NU e admin, redirecționează
+        if (!this.state.user || this.state.user.role !== "ADMIN") {
+            alert("Access denied. Admins only.");
+            this.props.history.push("/");
+        }
     }
 
     changeTitleHandler(event) {
@@ -45,17 +55,19 @@ class InsertMovie extends Component {
 
     saveMovie(e) {
         e.preventDefault();
-        let newMovie = {
-            title: this.state.title,
-            description: this.state.description,
-            genres: this.state.genres.split(',').map(g => g.trim()),
-            duration: this.state.duration,
-            posterUrl: this.state.posterUrl
+        const { title, description, genres, duration, posterUrl, user } = this.state;
+
+        const newMovie = {
+            title,
+            description,
+            genres: genres.split(',').map(g => g.trim()),
+            duration,
+            posterUrl
         };
 
         console.log("Saving Movie: ", newMovie);
 
-        MovieService.insertMovie(newMovie)
+        MovieService.insertMovie(newMovie, user.id)
             .then(() => {
                 this.props.history.push("/");
             })
@@ -81,23 +93,23 @@ class InsertMovie extends Component {
                                     <div className="form-group">
                                         <label>Movie Title</label>
                                         <input type="text" className="form-control" placeholder="Enter Movie Title"
-                                            value={this.state.title} onChange={this.changeTitleHandler} />
+                                               value={this.state.title} onChange={this.changeTitleHandler} />
 
                                         <label>Movie Description</label>
                                         <textarea className="form-control" placeholder="Enter Description"
-                                            value={this.state.description} onChange={this.changeDescriptionHandler} />
+                                                  value={this.state.description} onChange={this.changeDescriptionHandler} />
 
                                         <label>Movie Genres (comma separated)</label>
                                         <input type="text" className="form-control" placeholder="e.g. DRAMA, ACTION"
-                                            value={this.state.genres} onChange={this.changeGenresHandler} />
+                                               value={this.state.genres} onChange={this.changeGenresHandler} />
 
                                         <label>Movie Duration (minutes)</label>
                                         <input type="number" className="form-control" placeholder="Enter Duration"
-                                            value={this.state.duration} onChange={this.changeDurationHandler} />
+                                               value={this.state.duration} onChange={this.changeDurationHandler} />
 
                                         <label>Poster URL</label>
                                         <input type="text" className="form-control" placeholder="Enter Poster URL"
-                                            value={this.state.posterUrl} onChange={this.changePosterUrlHandler} />
+                                               value={this.state.posterUrl} onChange={this.changePosterUrlHandler} />
                                     </div>
 
                                     <button className="btn btn-primary mt-3" onClick={this.saveMovie}>Save</button>

@@ -6,13 +6,16 @@ import './UpdateMovie.css';
 class UpdateMovie extends Component {
     constructor(props) {
         super(props);
+        const user = JSON.parse(localStorage.getItem("loggedUser")) || {};
+
         this.state = {
             id: this.props.match?.params?.id,
             title: '',
             description: '',
             genres: '',
             duration: '',
-            posterUrl: ''
+            posterUrl: '',
+            user: user
         };
 
         this.changeTitleHandler = this.changeTitleHandler.bind(this);
@@ -25,12 +28,19 @@ class UpdateMovie extends Component {
     }
 
     componentDidMount() {
+        // Dacă userul nu e ADMIN → redirect
+        if (!this.state.user || this.state.user.role !== "ADMIN") {
+            alert("Access denied. Admins only.");
+            this.props.history.push("/");
+            return;
+        }
+
         MovieService.getMovieById(this.state.id).then((response) => {
-            let movie = response.data;
+            const movie = response.data;
             this.setState({
                 title: movie.title,
                 description: movie.description,
-                genres: movie.genres?.join(', '), // Convertim lista în string separat prin virgulă
+                genres: movie.genres?.join(', '),
                 duration: movie.duration,
                 posterUrl: movie.posterUrl
             });
@@ -61,17 +71,19 @@ class UpdateMovie extends Component {
 
     updateMovie(e) {
         e.preventDefault();
-        let updatedMovie = {
-            title: this.state.title,
-            description: this.state.description,
-            genres: this.state.genres.split(',').map(g => g.trim()), // Convertim string-ul în listă de genuri
-            duration: this.state.duration,
-            posterUrl: this.state.posterUrl
+        const { title, description, genres, duration, posterUrl, user } = this.state;
+
+        const updatedMovie = {
+            title,
+            description,
+            genres: genres.split(',').map(g => g.trim()),
+            duration,
+            posterUrl
         };
 
-        console.log("Updated Movie: ", updatedMovie);
+        console.log("Updating Movie: ", updatedMovie);
 
-        MovieService.updateMovie(this.state.id, updatedMovie)
+        MovieService.updateMovie(this.state.id, updatedMovie, user.id)
             .then(() => {
                 this.props.history.push("/");
             })
@@ -97,23 +109,23 @@ class UpdateMovie extends Component {
                                     <div className="form-group">
                                         <label>Movie Title</label>
                                         <input type="text" className="form-control" placeholder="Enter Movie Title"
-                                            value={this.state.title} onChange={this.changeTitleHandler} />
+                                               value={this.state.title} onChange={this.changeTitleHandler} />
 
                                         <label>Movie Description</label>
                                         <textarea className="form-control" placeholder="Enter Description"
-                                            value={this.state.description} onChange={this.changeDescriptionHandler} />
+                                                  value={this.state.description} onChange={this.changeDescriptionHandler} />
 
                                         <label>Movie Genres (comma separated)</label>
                                         <input type="text" className="form-control" placeholder="e.g. DRAMA, ACTION"
-                                            value={this.state.genres} onChange={this.changeGenresHandler} />
+                                               value={this.state.genres} onChange={this.changeGenresHandler} />
 
                                         <label>Movie Duration (minutes)</label>
                                         <input type="number" className="form-control" placeholder="Enter Duration"
-                                            value={this.state.duration} onChange={this.changeDurationHandler} />
+                                               value={this.state.duration} onChange={this.changeDurationHandler} />
 
                                         <label>Poster URL</label>
                                         <input type="text" className="form-control" placeholder="Enter Poster URL"
-                                            value={this.state.posterUrl} onChange={this.changePosterUrlHandler} />
+                                               value={this.state.posterUrl} onChange={this.changePosterUrlHandler} />
                                     </div>
 
                                     <button className="btn btn-success mt-3" onClick={this.updateMovie}>Update</button>

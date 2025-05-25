@@ -38,4 +38,52 @@ public class Movie {
 
     @JsonProperty("posterUrl")
     private String posterUrl;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public List<GenreType> getGenres() {
+        return genres;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public String getPosterUrl() {
+        return posterUrl;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setGenres(List<GenreType> genres) {
+        this.genres = genres;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public void setPosterUrl(String posterUrl) {
+        this.posterUrl = posterUrl;
+    }
 }

@@ -15,5 +15,7 @@ public enum GenreType {
     ADVENTURE,
     ANIMATION,
     HISTORICAL,
-    MYSTERY
+    MYSTERY,
+    HISTORY,
+    CRIME
 }

@@ -5,9 +5,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 class DeleteMovie extends Component {
     constructor(props) {
         super(props);
+        const user = JSON.parse(localStorage.getItem("loggedUser")) || {};
+
         this.state = {
             id: this.props.match?.params?.id,
-            movie: {}
+            movie: {},
+            user: user
         };
 
         this.delete = this.delete.bind(this);
@@ -15,16 +18,25 @@ class DeleteMovie extends Component {
     }
 
     componentDidMount() {
-        MovieService.getMovieById(this.state.id).then((response) => {
-            this.setState({ movie: response.data });
-        }).catch(error => {
-            console.error("Error loading movie for delete:", error);
-        });
+        // Verifică dacă e admin
+        if (!this.state.user || this.state.user.role !== "ADMIN") {
+            alert("Access denied. Admins only.");
+            this.props.history.push("/");
+            return;
+        }
+
+        MovieService.getMovieById(this.state.id)
+            .then((response) => {
+                this.setState({ movie: response.data });
+            })
+            .catch(error => {
+                console.error("Error loading movie for delete:", error);
+            });
     }
 
     delete(e) {
         e.preventDefault();
-        MovieService.deleteMovie(this.state.id)
+        MovieService.deleteMovie(this.state.id, this.state.user.id)
             .then(() => {
                 this.props.history.push("/");
             })
