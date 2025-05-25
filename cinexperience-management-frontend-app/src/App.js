@@ -8,6 +8,8 @@ import DeleteMovie from './components/DeleteMovie';
 import InsertMovie from './components/InsertMovie';
 import MovieSessions from './components/MovieSessions';
 import Login from './components/Login';
+import MovieSchedule from "./components/MovieSchedule";
+import SeatBooking from "./components/SeatBooking";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -24,6 +26,8 @@ function App() {
                         <Route exact path='/insertmovie' component={InsertMovie} />
                         <Route exact path='/viewmoviesession/:movieId' component={MovieSessions} />
                         <Route exact path='/login' component={Login} />
+                        <Route path="/schedule/:cityId" component={MovieSchedule} />
+                        <Route path="/session/:sessionId" component={SeatBooking} />
                     </Switch>
                 </div>
             </div>

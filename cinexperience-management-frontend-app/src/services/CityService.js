@@ -1,4 +1,3 @@
-// src/services/CityService.js
 import axios from 'axios';
 
 const CITY_API_BASE_URL = "http://localhost:9000/api/cities";

@@ -27,10 +27,14 @@
 - Admin can assign movie sessions to specific cities
 - Users can filter available movies by selected city (dropdown in header)
 
+### 🎟️ Seat Booking System
+- Choose number of tickets (1–8)
+- Interactive seat selection per session
+- Real-time display of reserved vs. available seats
+- Dynamic total price calculation
+- Booking validation per session
+
 ## 🔄 Upcoming Features
-- Frontend user registration
-- Ticket booking and seat reservation
-- Admin interface for managing users and cities
 - Movie filtering by genre
 - User profile page with session history
 - Wishlist functionality for saving movies the user wants to watch

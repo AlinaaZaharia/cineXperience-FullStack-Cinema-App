@@ -1,12 +1,16 @@
 package com.example.cinexperiencemanagementbackendapp.controller;
 
 import com.example.cinexperiencemanagementbackendapp.entity.MovieSession;
+import com.example.cinexperiencemanagementbackendapp.repository.MovieRepo;
+import com.example.cinexperiencemanagementbackendapp.repository.MovieSessionRepo;
 import com.example.cinexperiencemanagementbackendapp.service.MovieSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/sessions")
@@ -15,15 +19,14 @@ public class MovieSessionController {
     @Autowired
     private MovieSessionService movieSessionService;
 
+    @Autowired
+    private MovieSessionRepo sessionRepo;
+
     @PostMapping("/add")
     public MovieSession addSession(@RequestBody MovieSession session){
         return movieSessionService.createSession(session);
     }
 
-    @GetMapping("/viewsession/{movieId}")
-    public List<MovieSession> getSessionsByMovie(@PathVariable int movieId) {
-        return movieSessionService.getSessionsForMovie(movieId);
-    }
 
     @GetMapping("/viewsession/{movieId}/{cityId}")
     public List<MovieSession> getSessionsByMovieAndCity(@PathVariable int movieId, @PathVariable Long cityId) {
@@ -37,7 +40,14 @@ public class MovieSessionController {
 
     @GetMapping("/by-city/{cityId}")
     public List<MovieSession> getSessionsByCity(@PathVariable int cityId) {
-        return movieSessionService.getSessionsByCity(cityId); // <- aici era problema
+        return movieSessionService.getSessionsByCity(cityId);
+    }
+
+    @GetMapping("/{sessionId}/city/{cityId}")
+    public ResponseEntity<MovieSession> getSessionByIdAndCity(@PathVariable int sessionId, @PathVariable int cityId) {
+        Optional<MovieSession> sessionOpt = sessionRepo.findByIdAndCityId(sessionId, cityId);
+        return sessionOpt.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 

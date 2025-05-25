@@ -1,26 +1,31 @@
 import React, { Component } from 'react';
 import MovieService from '../services/MovieService';
-import SessionService from '../services/SessionService';
-import CityService from '../services/CityService';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ListMovies.css';
+
+function getUserFromStorage() {
+  try {
+    const raw = localStorage.getItem("loggedUser");
+    if (!raw || raw === "undefined") return null;
+    return JSON.parse(raw);
+  } catch (e) {
+    return null;
+  }
+}
 
 class ListMovies extends Component {
   constructor(props) {
     super(props);
     this.state = {
       movies: [],
-      cities: [],
-      selectedCityId: '',
+      user: getUserFromStorage()
     };
 
-    this.handleCityChange = this.handleCityChange.bind(this);
     this.viewDetails = this.viewDetails.bind(this);
   }
 
   componentDidMount() {
     this.loadAllMovies();
-    this.loadCities();
   }
 
   loadAllMovies() {
@@ -29,42 +34,13 @@ class ListMovies extends Component {
     });
   }
 
-  loadCities() {
-    CityService.getAllCities().then((response) => {
-      this.setState({ cities: response.data });
-    });
-  }
-
-  handleCityChange(event) {
-    const cityId = event.target.value;
-    this.setState({ selectedCityId: cityId });
-
-    if (cityId === '') {
-      this.loadAllMovies();
-    } else {
-      SessionService.getSessionsByCity(cityId).then((response) => {
-        const uniqueMovies = [];
-        const seen = new Set();
-
-        response.data.forEach(session => {
-          const movie = session.movie;
-          if (movie && !seen.has(movie.id)) {
-            seen.add(movie.id);
-            uniqueMovies.push(movie);
-          }
-        });
-
-        this.setState({ movies: uniqueMovies });
-      }).catch(error => {
-        console.error("Error fetching sessions by city:", error);
-      });
-    }
-  }
-
   viewDetails(id) {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = getUserFromStorage();
+
     if (!user) {
       this.props.history.push(`/viewmovie/${id}`);
+    } else if (user.role === "ADMIN") {
+      this.props.history.push(`/updatemovie/${id}`);
     } else {
       this.props.history.push(`/viewmoviesession/${id}`);
     }
@@ -74,21 +50,6 @@ class ListMovies extends Component {
     return (
         <div className="movie-page container-fluid">
           <h1 className="text-center mb-4">Movies HomePage</h1>
-
-          <div className="mb-4">
-            <label htmlFor="citySelect">Filter by City: </label>
-            <select
-                id="citySelect"
-                className="form-select w-auto d-inline-block ms-2"
-                value={this.state.selectedCityId}
-                onChange={this.handleCityChange}
-            >
-              <option value=''>All Cities</option>
-              {this.state.cities.map(city => (
-                  <option key={city.id} value={city.id}>{city.name}</option>
-              ))}
-            </select>
-          </div>
 
           <div className="row">
             {this.state.movies.map((movie) => (
@@ -105,7 +66,11 @@ class ListMovies extends Component {
                           className="btn btn-info btn-sm mt-auto"
                           onClick={() => this.viewDetails(movie.id)}
                       >
-                        View
+                        {this.state.user?.role === "ADMIN"
+                            ? "Edit"
+                            : this.state.user
+                                ? "View Sessions"
+                                : "View"}
                       </button>
                     </div>
                   </div>

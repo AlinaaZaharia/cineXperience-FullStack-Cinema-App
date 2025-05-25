@@ -1,7 +1,6 @@
 package com.example.cinexperiencemanagementbackendapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -22,11 +21,10 @@ public class MovieSession {
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 
-    @ManyToOne
-    @JoinColumn(name = "city_id", nullable = false)
     @JsonProperty("city")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "city_id", nullable = false)
     private City city;
-
 
     @JsonProperty("hallName")
     @Column(name = "hall_name", nullable = false)
@@ -43,9 +41,10 @@ public class MovieSession {
     public MovieSession() {
     }
 
-    public MovieSession(int id, Movie movie, String hallName, List<Seat> seats, LocalDateTime startTime) {
+    public MovieSession(int id, Movie movie, City city, String hallName, List<Seat> seats, LocalDateTime startTime) {
         this.id = id;
         this.movie = movie;
+        this.city = city;
         this.hallName = hallName;
         this.seats = seats;
         this.startTime = startTime;
@@ -65,6 +64,14 @@ public class MovieSession {
 
     public void setMovie(Movie movie) {
         this.movie = movie;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 
     public String getHallName() {

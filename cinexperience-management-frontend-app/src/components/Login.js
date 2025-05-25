@@ -34,7 +34,7 @@ class Login extends Component {
             .then(response => {
                 localStorage.setItem("loggedUser", JSON.stringify(response.data));
                 this.props.history.push("/");
-                window.location.reload(); // pentru a re-randa componentele care depind de user
+                window.location.reload();
             })
             .catch(error => {
                 console.error("Login failed:", error);

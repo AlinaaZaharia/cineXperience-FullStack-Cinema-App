@@ -3,16 +3,16 @@ import axios from "axios";
 const BASE_API = "http://localhost:9000/api/sessions";
 
 class SessionService {
-    getSessionsByMovieId(movieId) {
-        return axios.get(`${BASE_API}/viewsession/${movieId}`);
-    }
-
-    createSession(sessionData) {
-        return axios.post(`${BASE_API}/add`, sessionData);
+    getSessionsByMovieAndCity(movieId, cityId) {
+        return axios.get(`${BASE_API}/viewsession/${movieId}/${cityId}`);
     }
 
     getSessionsByCity(cityId) {
         return axios.get(`${BASE_API}/by-city/${cityId}`);
+    }
+
+    getSessionByIdAndCity(sessionId, cityId) {
+        return axios.get(`${BASE_API}/${sessionId}/city/${cityId}`);
     }
 }
 

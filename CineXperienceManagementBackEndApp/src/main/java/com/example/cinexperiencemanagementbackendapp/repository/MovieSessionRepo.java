@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MovieSessionRepo extends JpaRepository<MovieSession, Long> {
     List<MovieSession> findByMovieId(int movieId);
@@ -17,4 +18,7 @@ public interface MovieSessionRepo extends JpaRepository<MovieSession, Long> {
     List<MovieSession> findByMovieIdAndCityId(@Param("movieId") int movieId, @Param("cityId") Long cityId);
 
     List<MovieSession> findByCityId(int cityId);
+
+    Optional<MovieSession> findByIdAndCityId(int id, int cityId);
+
 }

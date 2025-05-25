@@ -26,7 +26,6 @@ class InsertMovie extends Component {
     }
 
     componentDidMount() {
-        // Dacă userul NU e admin, redirecționează
         if (!this.state.user || this.state.user.role !== "ADMIN") {
             alert("Access denied. Admins only.");
             this.props.history.push("/");

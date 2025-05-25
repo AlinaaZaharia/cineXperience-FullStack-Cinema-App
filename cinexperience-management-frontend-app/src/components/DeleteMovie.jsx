@@ -18,7 +18,6 @@ class DeleteMovie extends Component {
     }
 
     componentDidMount() {
-        // Verifică dacă e admin
         if (!this.state.user || this.state.user.role !== "ADMIN") {
             alert("Access denied. Admins only.");
             this.props.history.push("/");

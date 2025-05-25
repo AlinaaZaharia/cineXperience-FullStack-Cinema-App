@@ -1,0 +1,534 @@
+.schedule-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #CADCFC 0%, #3561ac 100%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.schedule-header {
+    padding: 40px 0 30px;
+    text-align: center;
+    color: white;
+}
+
+.header-content .page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    letter-spacing: -0.02em;
+}
+
+.header-content .page-subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+    margin: 0;
+    font-weight: 300;
+}
+
+.date-selector-section {
+    margin-bottom: 30px;
+}
+
+.day-selector-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.day-buttons-container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.day-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    min-width: 65px;
+    text-align: center;
+}
+
+.day-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.day-btn.active {
+    background: white;
+    color: #3561ac;
+    border-color: white;
+    font-weight: 600;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.day-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 2px;
+    letter-spacing: 0.5px;
+}
+
+.day-date {
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.calendar-picker-container {
+    position: relative;
+}
+
+.calendar-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.date-picker-overlay {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.date-picker-input {
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 14px;
+    min-width: 160px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.date-picker-input:focus {
+    border-color: #3561ac;
+}
+
+.selected-date-display {
+    display: flex;
+    justify-content: center;
+}
+
+.selected-date-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    padding: 15px 30px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    color: white;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.date-label {
+    display: block;
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+.selected-day {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+    letter-spacing: -0.5px;
+}
+
+.selected-date-text {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+.movies-section {
+    padding-bottom: 40px;
+}
+
+.movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.movie-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    height: 330px;
+}
+
+.movie-description {
+    font-size: 0.8rem;
+    color: grey;
+    margin: 4px 0 10px 0;
+    line-height: 1.5;
+}
+
+.movie-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.movie-poster-container {
+    position: relative;
+    width: 180px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.movie-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.movie-card:hover .movie-poster {
+    transform: scale(1.05);
+}
+
+.movie-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(202, 220, 252, 0.9), rgba(53, 97, 172, 0.9));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.movie-card:hover .movie-overlay {
+    opacity: 1;
+}
+
+.play-button {
+    color: white;
+    font-size: 2rem;
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+}
+
+.movie-card:hover .play-button {
+    transform: scale(1);
+}
+
+/* Movie Content - Right Side */
+.movie-content {
+    padding: 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.movie-info {
+    flex: 1;
+}
+
+.movie-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.movie-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin: 0;
+    line-height: 1.3;
+    flex: 1;
+}
+
+.movie-rating {
+    flex-shrink: 0;
+}
+
+.rating-badge {
+    background: linear-gradient(45deg, #3561ac, #CADCFC);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.movie-meta {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #64748b;
+    font-size: 0.8rem;
+}
+
+.meta-item svg {
+    color: #94a3b8;
+}
+
+.genre {
+    color: #3561ac;
+    font-weight: 500;
+}
+
+.showtimes-container {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 12px;
+    margin-top: auto;
+}
+
+.showtimes-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.showtimes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.showtime-btn {
+    background: linear-gradient(45deg, #3561ac, #CADCFC);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(53, 97, 172, 0.3);
+}
+
+.showtime-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(53, 97, 172, 0.4);
+    background: linear-gradient(45deg, #2d4d8a, #b8cefc);
+}
+
+.showtime-btn:active {
+    transform: translateY(0);
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+}
+
+.loading-spinner {
+    text-align: center;
+    color: white;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-spinner p {
+    font-size: 1.1rem;
+    margin: 0;
+    opacity: 0.9;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: white;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.8;
+}
+
+.empty-state h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    opacity: 0.9;
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+    opacity: 0.7;
+    line-height: 1.6;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .schedule-header {
+        padding: 30px 0 20px;
+    }
+
+    .header-content .page-title {
+        font-size: 2rem;
+    }
+
+    .header-content .page-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .day-buttons-container {
+        gap: 6px;
+    }
+
+    .day-btn {
+        min-width: 55px;
+        padding: 10px 12px;
+    }
+
+    .day-name {
+        font-size: 0.7rem;
+    }
+
+    .day-date {
+        font-size: 0.85rem;
+    }
+
+    .movies-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 0 15px;
+    }
+
+    .movie-card {
+        border-radius: 14px;
+        flex-direction: column;
+        height: auto;
+    }
+
+    .movie-poster-container {
+        width: 100%;
+        height: 200px;
+    }
+
+    .movie-content {
+        padding: 14px;
+    }
+
+    .movie-title {
+        font-size: 1rem;
+    }
+
+    .selected-date-card {
+        padding: 12px 24px;
+    }
+
+    .container {
+        padding: 0 15px;
+    }
+
+    .showtimes-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-content .page-title {
+        font-size: 1.8rem;
+    }
+
+    .day-selector-wrapper {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .selected-date-card {
+        padding: 10px 20px;
+    }
+
+    .selected-day {
+        font-size: 1.1rem;
+    }
+
+    .movie-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .movies-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .movie-poster-container {
+        height: 180px;
+    }
+}

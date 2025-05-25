@@ -24,7 +24,7 @@ public class City {
         this.name = name;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

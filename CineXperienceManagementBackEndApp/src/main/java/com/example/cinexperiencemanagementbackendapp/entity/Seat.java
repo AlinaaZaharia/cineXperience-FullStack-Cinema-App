@@ -30,7 +30,6 @@ public class Seat {
     @JoinColumn(name = "session_id", nullable = false)
     private MovieSession session;
 
-    // Constructors
     public Seat() {}
 
     public Seat(Long id, int roww, int number, boolean reserved, MovieSession session) {
@@ -41,7 +40,6 @@ public class Seat {
         this.session = session;
     }
 
-    // Getters
     public Long getId() {
         return id;
     }
@@ -62,7 +60,6 @@ public class Seat {
         return session;
     }
 
-    // Setters
     public void setId(Long id) {
         this.id = id;
     }

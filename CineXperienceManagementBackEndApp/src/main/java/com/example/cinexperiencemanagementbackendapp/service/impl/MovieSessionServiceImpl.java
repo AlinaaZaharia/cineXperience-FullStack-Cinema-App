@@ -1,8 +1,10 @@
 package com.example.cinexperiencemanagementbackendapp.service.impl;
 
+import com.example.cinexperiencemanagementbackendapp.entity.City;
 import com.example.cinexperiencemanagementbackendapp.entity.Movie;
 import com.example.cinexperiencemanagementbackendapp.entity.MovieSession;
 import com.example.cinexperiencemanagementbackendapp.entity.Seat;
+import com.example.cinexperiencemanagementbackendapp.repository.CityRepo;
 import com.example.cinexperiencemanagementbackendapp.repository.MovieRepo;
 import com.example.cinexperiencemanagementbackendapp.repository.MovieSessionRepo;
 import com.example.cinexperiencemanagementbackendapp.service.MovieSessionService;
@@ -22,17 +24,26 @@ public class MovieSessionServiceImpl implements MovieSessionService {
     @Autowired
     private MovieRepo movieRepo;
 
+    @Autowired
+    private CityRepo cityRepository;
+
     @Override
     public MovieSession createSession(MovieSession session) {
+        Movie movie = movieRepo.findById(session.getMovie().getId())
+                .orElseThrow(() -> new RuntimeException("Movie not found with ID: " + session.getMovie().getId()));
 
-        Movie movie = movieRepo.findById(session.getMovie().getId()).orElseThrow(() -> new RuntimeException("Movie not found with ID: " + session.getMovie().getId()));
+        City city = cityRepository.findById(session.getCity().getId())
+                .orElseThrow(() -> new RuntimeException("City not found with ID: " + session.getCity().getId()));
+
         session.setMovie(movie);
+        session.setCity(city);
+
         MovieSession savedSession = sessionRepo.save(session);
 
-        if(session.getSeats() == null || session.getSeats().isEmpty()){
+        if (session.getSeats() == null || session.getSeats().isEmpty()) {
             List<Seat> generatedSeats = new ArrayList<>();
-            for(int row=1; row<=6; row++){
-                for(int num=1; num<=6; num++){
+            for (int row = 1; row <= 6; row++) {
+                for (int num = 1; num <= 6; num++) {
                     Seat seat = new Seat();
                     seat.setRoww(row);
                     seat.setNumber(num);
@@ -41,16 +52,17 @@ public class MovieSessionServiceImpl implements MovieSessionService {
                     generatedSeats.add(seat);
                 }
             }
-            session.setSeats(generatedSeats);
+            savedSession.setSeats(generatedSeats);
         }
+
         return sessionRepo.save(savedSession);
     }
 
     @Override
     public List<MovieSession> getSessionsForMovie(int movieId) {
         List<MovieSession> sessions = sessionRepo.findSessionsByMovieId(movieId);
-        if(sessions.isEmpty()) {
-            System.out.println("Nu s-au gasit sesiuni pentru filmul cu ID-ul: "+movieId);
+        if (sessions.isEmpty()) {
+            System.out.println("Nu s-au gasit sesiuni pentru filmul cu ID-ul: " + movieId);
         }
         return sessions;
     }
