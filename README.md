@@ -7,43 +7,57 @@
 ### 🎬 Movie Management
 - View all available movies
 - View detailed movie pages
-- Insert, update, and delete movies (admin only)
+- Insert, update, and delete movies *(admin only)*
+- Add movies with:
+  - Poster upload via file selector
+  - Duration selection via scrollable input
+  - Multiple genres (from a predefined list)
 
 ### 📅 Session Scheduling
-- Add movie sessions (admin only)
+- Admins can add new movie sessions
 - View sessions grouped by movie and city
 - Display session hall, time, and available seats
-- Filter movies by city selection in the header
-
-### 👥 Authentication & Roles
-- Register and login
-- Session saved in `localStorage`
-- Different behavior for admin vs regular user:
-  - Admin: can edit/delete movies and sessions
-  - User: can only view session information
-
-### 🏙️ City Support
-- Cities are stored in the database
-- Admin can assign movie sessions to specific cities
-- Users can filter available movies by selected city (dropdown in header)
+- Filter movies by city and genre
 
 ### 🎟️ Seat Booking System
 - Choose number of tickets (1–8)
-- Interactive seat selection per session
-- Real-time display of reserved vs. available seats
-- Dynamic total price calculation
-- Booking validation per session
+- **Interactive seat map**:
+  - Select specific seats
+  - Visually differentiate between reserved and available seats
+- Real-time **total price calculation**
+- Validation for existing reservations
 
-## 🔄 Upcoming Features
-- Movie filtering by genre
-- User profile page with session history
-- Wishlist functionality for saving movies the user wants to watch
+### 🎚️ Filtering & Navigation
+- Dropdown filters by **city** (in header) and **genre**
+- Only movies available for the selected filters are shown
+- If no movies match the filters, an informative message is displayed
+
+### 👥 Authentication & Roles
+- Register and login
+- User session stored in `localStorage`
+- Behavior based on role:
+  - **Admin**: can add/edit/delete movies and sessions
+  - **User**: can browse, filter, and book seats
+
+---
+
+## 🛠️ Under Development
+- Profile page with booking history
+- Rating system for movies
+- Wishlist / favorite movies
+- PDF/email confirmation after booking
+
+---
 
 ## 🚀 Tech Stack
 
-- **Backend**: Spring Boot, JPA, MySQL
-- **Frontend**: React, Bootstrap
-- **Communication**: REST API using Axios
+| Layer       | Technology              |
+|-------------|--------------------------|
+| **Backend** | Java Spring Boot, JPA, MySQL |
+| **Frontend**| React, Bootstrap 5, Axios  |
+| **Storage** | Local file system (for posters) |
+| **API**     | RESTful APIs              |
 
+---
 
-🛠️ **Note:** This project is still in active development and will be updated frequently as new functionality is added.
+> ℹ️ **Note**: This project is actively being developed. New features and refinements are added regularly.
