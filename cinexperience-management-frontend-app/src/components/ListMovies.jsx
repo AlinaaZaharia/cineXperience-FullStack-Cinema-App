@@ -1,85 +1,102 @@
 import React, { Component } from 'react';
 import MovieService from '../services/MovieService';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './ListMovies.css';
 
-function getUserFromStorage() {
-  try {
-    const raw = localStorage.getItem("loggedUser");
-    if (!raw || raw === "undefined") return null;
-    return JSON.parse(raw);
-  } catch (e) {
-    return null;
-  }
-}
-
-class ListMovies extends Component {
+class AddMovie extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      movies: [],
-      user: getUserFromStorage()
+      title: '',
+      description: '',
+      duration: 90,
+      genres: [],
+      selectedGenres: [],
+      posterFile: null,
+      allGenres: []
     };
-
-    this.viewDetails = this.viewDetails.bind(this);
   }
 
   componentDidMount() {
-    this.loadAllMovies();
-  }
-
-  loadAllMovies() {
-    MovieService.getMovies().then((response) => {
-      this.setState({ movies: response.data });
+    MovieService.getAllGenres().then(res => {
+      this.setState({ allGenres: res.data });
     });
   }
 
-  viewDetails(id) {
-    const user = getUserFromStorage();
+  handleChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  }
 
-    if (!user) {
-      this.props.history.push(`/viewmovie/${id}`);
-    } else if (user.role === "ADMIN") {
-      this.props.history.push(`/updatemovie/${id}`);
-    } else {
-      this.props.history.push(`/viewmoviesession/${id}`);
+  handleGenreChange = (e) => {
+    const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
+    this.setState({ selectedGenres: selectedOptions });
+  }
+
+  handleFileChange = (e) => {
+    this.setState({ posterFile: e.target.files[0] });
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('title', this.state.title);
+    formData.append('description', this.state.description);
+    formData.append('duration', this.state.duration);
+    formData.append('genres', JSON.stringify(this.state.selectedGenres));
+    if (this.state.posterFile) {
+      formData.append('poster', this.state.posterFile);
     }
+
+    MovieService.addMovie(formData)
+        .then(() => {
+          alert("Movie added successfully");
+          this.props.history.push('/listmovies');
+        })
+        .catch(error => {
+          console.error("Error adding movie:", error);
+          alert("Failed to add movie.");
+        });
   }
 
   render() {
     return (
-        <div className="movie-page container-fluid">
-          <h1 className="text-center mb-4">Movies HomePage</h1>
+        <div className="container mt-4 text-white">
+          <h2 className="mb-4">Add Movie</h2>
+          <form onSubmit={this.handleSubmit} encType="multipart/form-data">
+            <div className="mb-3">
+              <label className="form-label">Title</label>
+              <input type="text" className="form-control" name="title" value={this.state.title} onChange={this.handleChange} required />
+            </div>
 
-          <div className="row">
-            {this.state.movies.map((movie) => (
-                <div className="col-12 col-sm-6 col-md-4 col-lg-2 mb-4" key={movie.id}>
-                  <div className="movie-card-custom card h-100 shadow-sm">
-                    <img
-                        src={`http://localhost:9000/images/${movie.posterUrl}`}
-                        alt={movie.title}
-                        className="card-img-top movie-poster"
-                    />
-                    <div className="card-body d-flex flex-column">
-                      <h5 className="card-title">{movie.title}</h5>
-                      <button
-                          className="btn btn-info btn-sm mt-auto"
-                          onClick={() => this.viewDetails(movie.id)}
-                      >
-                        {this.state.user?.role === "ADMIN"
-                            ? "Edit"
-                            : this.state.user
-                                ? "View Sessions"
-                                : "View"}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-            ))}
-          </div>
+            <div className="mb-3">
+              <label className="form-label">Description</label>
+              <textarea className="form-control" name="description" value={this.state.description} onChange={this.handleChange} required />
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label">Duration (minutes)</label>
+              <input type="number" className="form-control" name="duration" value={this.state.duration} onChange={this.handleChange} min="30" max="300" step="5" />
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label">Genres</label>
+              <select className="form-select" multiple value={this.state.selectedGenres} onChange={this.handleGenreChange}>
+                {this.state.allGenres.map((genre, index) => (
+                    <option key={index} value={genre}>{genre}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label">Poster Image</label>
+              <input type="file" className="form-control" accept="image/*" onChange={this.handleFileChange} />
+            </div>
+
+            <button type="submit" className="btn btn-primary">Save Movie</button>
+          </form>
         </div>
     );
   }
 }
 
-export default ListMovies;
+export default AddMovie;

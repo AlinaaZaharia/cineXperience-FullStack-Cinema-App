@@ -30,7 +30,7 @@ class UpdateMovie extends Component {
     componentDidMount() {
         if (!this.state.user || this.state.user.role !== "ADMIN") {
             alert("Access denied. Admins only.");
-            this.props.history.push("/");
+            this.props.history.push("/listmovies");
             return;
         }
 
@@ -84,7 +84,7 @@ class UpdateMovie extends Component {
 
         MovieService.updateMovie(this.state.id, updatedMovie, user.id)
             .then(() => {
-                this.props.history.push("/");
+                this.props.history.push("/listmovies");
             })
             .catch(error => {
                 console.error("Error updating movie:", error);
@@ -92,7 +92,7 @@ class UpdateMovie extends Component {
     }
 
     cancel() {
-        this.props.history.push("/");
+        this.props.history.push("/listmovies");
     }
 
     render() {

@@ -2,6 +2,7 @@ package com.example.cinexperiencemanagementbackendapp.controller;
 
 import com.example.cinexperiencemanagementbackendapp.entity.Movie;
 import com.example.cinexperiencemanagementbackendapp.entity.User;
+import com.example.cinexperiencemanagementbackendapp.enums.GenreType;
 import com.example.cinexperiencemanagementbackendapp.repository.UserRepo;
 import com.example.cinexperiencemanagementbackendapp.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,4 +66,8 @@ public class MovieController {
         return movieService.getMovieById(id);
     }
 
+    @GetMapping("/genres")
+    public GenreType[] getGenres() {
+        return GenreType.values();
+    }
 }

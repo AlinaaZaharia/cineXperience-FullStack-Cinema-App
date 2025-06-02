@@ -15,7 +15,8 @@ class MovieSchedule extends Component {
             movieSchedules: [],
             loading: true,
             allSessions: [],
-            showDatePicker: false
+            showDatePicker: false,
+            user: JSON.parse(localStorage.getItem("loggedUser") || "null")
         };
     }
 
@@ -23,6 +24,15 @@ class MovieSchedule extends Component {
         this.loadCityInfo();
         this.loadAllSessions();
     }
+
+    handleEditSession = (sessionId) => {
+        this.props.history.push(`/edit-session/${sessionId}`);
+    };
+
+    handleAddSession = () => {
+        this.props.history.push(`/add-session/${this.state.cityId}`);
+    };
+
 
     getCurrentDay() {
         const days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
@@ -174,9 +184,17 @@ class MovieSchedule extends Component {
                 {/* Header Section */}
                 <div className="schedule-header">
                     <div className="container">
-                        <div className="header-content">
-                            <h1 className="page-title">Movie Schedule</h1>
-                            <p className="page-subtitle">Choose your perfect showtime</p>
+                        <div className="header-content d-flex justify-content-between align-items-center">
+                            <div>
+                                <h1 className="page-title">Movie Schedule</h1>
+                                <p className="page-subtitle">Choose your perfect showtime</p>
+                            </div>
+
+                            {this.state.user?.role === "ADMIN" && (
+                                <button className="btn btn-success" onClick={this.handleAddSession}>
+                                    + Add Session
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -261,6 +279,7 @@ class MovieSchedule extends Component {
                                 <div className="movies-grid">
                                     {movieSchedules.map(movie => (
                                         <div key={movie.id} className="movie-card">
+                                            {/* Poster + Overlay */}
                                             <div className="movie-poster-container">
                                                 <img
                                                     src={`http://localhost:9000/images/${movie.posterUrl}`}
@@ -276,40 +295,58 @@ class MovieSchedule extends Component {
                                                 </div>
                                             </div>
 
+                                            {/* Content */}
                                             <div className="movie-content">
-                                                <div className="movie-header">
-                                                    <h3 className="movie-title">{movie.title}</h3>
-                                                </div>
+                                                {/* Info Section */}
+                                                <div className="movie-info">
+                                                    <div className="movie-header d-flex justify-content-between align-items-center">
+                                                        <h3 className="movie-title mb-0">{movie.title}</h3>
+                                                        {movie.rating && (
+                                                            <span className="rating-badge">{movie.rating}</span>
+                                                        )}
+                                                    </div>
+
                                                     {movie.description && (
                                                         <p className="movie-description">{movie.description}</p>
                                                     )}
 
-
-
-                                                <div className="movie-meta">
-                                                    <div className="meta-item">
-                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                            <circle cx="12" cy="12" r="10"></circle>
-                                                            <polyline points="12,6 12,12 16,14"></polyline>
-                                                        </svg>
-                                                        <span>{movie.duration} min</span>
-                                                    </div>
-                                                    <div className="meta-item">
-                                                        <span className="genre">{movie.genre}</span>
+                                                    <div className="movie-meta d-flex flex-wrap gap-3">
+                                                        <div className="meta-item d-flex align-items-center">
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                                <circle cx="12" cy="12" r="10"></circle>
+                                                                <polyline points="12,6 12,12 16,14"></polyline>
+                                                            </svg>
+                                                            <span className="ms-1">{movie.duration} min</span>
+                                                        </div>
+                                                        {movie.genre && (
+                                                            <div className="meta-item">
+                                                                <span className="genre">{movie.genre}</span>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
 
-                                                <div className="showtimes-container">
+                                                {/* Showtimes Section */}
+                                                <div className="showtimes-container mt-3">
                                                     <h4 className="showtimes-title">Showtimes</h4>
                                                     <div className="showtimes-grid">
                                                         {movie.showtimes.map((showtime, index) => (
-                                                            <button
-                                                                key={index}
-                                                                className="showtime-btn"
-                                                                onClick={() => this.handleShowtimeClick(showtime.sessionId)}
-                                                            >
-                                                                {showtime.time}
-                                                            </button>
+                                                            <div key={index} className="d-flex align-items-center mb-2">
+                                                                <button
+                                                                    className="showtime-btn me-2"
+                                                                    onClick={() => this.handleShowtimeClick(showtime.sessionId)}
+                                                                >
+                                                                    {showtime.time}
+                                                                </button>
+                                                                {this.state.user?.role === "ADMIN" && (
+                                                                    <button
+                                                                        className="btn btn-sm btn-outline-primary"
+                                                                        onClick={() => this.handleEditSession(showtime.sessionId)}
+                                                                    >
+                                                                        Edit
+                                                                    </button>
+                                                                )}
+                                                            </div>
                                                         ))}
                                                     </div>
                                                 </div>
@@ -317,6 +354,7 @@ class MovieSchedule extends Component {
                                         </div>
                                     ))}
                                 </div>
+
                             )}
                         </div>
                     )}

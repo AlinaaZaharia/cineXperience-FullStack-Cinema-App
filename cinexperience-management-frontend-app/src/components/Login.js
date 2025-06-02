@@ -33,7 +33,7 @@ class Login extends Component {
         axios.post("http://localhost:9000/api/users/login", user)
             .then(response => {
                 localStorage.setItem("loggedUser", JSON.stringify(response.data));
-                this.props.history.push("/");
+                this.props.history.push("/listmovies");
                 window.location.reload();
             })
             .catch(error => {

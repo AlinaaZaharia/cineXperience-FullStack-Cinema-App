@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import SessionService from '../services/SessionService';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './SeatBooking.css';
+import SeatService from '../services/SeatService';
+
 
 class SeatBooking extends Component {
     constructor(props) {
@@ -14,7 +16,9 @@ class SeatBooking extends Component {
             loading: true,
             seatRows: new Map(),
             totalPrice: 0,
-            ticketPrice: 5.99
+            ticketPrice: 5.99,
+            showSuccessMessage: false
+
         };
     }
 
@@ -122,18 +126,33 @@ class SeatBooking extends Component {
     }
 
     handleBooking = () => {
-        const { selectedSeats, sessionData } = this.state;
+        const { selectedSeats } = this.state;
 
         if (selectedSeats.length === 0) {
             alert('Please select at least one seat');
             return;
         }
 
-        console.log('Booking seats:', selectedSeats);
-        console.log('Session:', sessionData.id);
+        Promise.all(
+            selectedSeats.map(seat =>
+                SeatService.reserveSeat(seat.id).catch(err => {
+                    throw new Error(`Seat ${seat.roww}-${seat.number} already reserved`);
+                })
+            )
+        )
+            .then(() => {
+                this.setState({ showSuccessMessage: true });
 
-        alert(`Booking ${selectedSeats.length} seats for ${sessionData.movie.title}`);
-    }
+                setTimeout(() => {
+                    this.props.history.goBack(); // sau .push('/movie-schedule') dacă vrei altceva
+                }, 3000);
+            })
+            .catch(error => {
+                alert('Some seats could not be reserved. Please try again.\n' + error.message);
+            });
+    };
+
+
 
     render() {
         const { sessionData, selectedSeats, numTickets, loading, seatRows, totalPrice, ticketPrice } = this.state;
@@ -160,6 +179,18 @@ class SeatBooking extends Component {
                 </div>
             );
         }
+
+        if (this.state.showSuccessMessage) {
+            return (
+                <div className="success-page">
+                    <div className="success-message">
+                        <h1>🎉 Reservation Confirmed!</h1>
+                        <p>You will be redirected shortly...</p>
+                    </div>
+                </div>
+            );
+        }
+
 
         const movie = sessionData.movie;
 

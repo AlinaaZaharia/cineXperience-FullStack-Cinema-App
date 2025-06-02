@@ -1,30 +1,74 @@
-.movie-page {
-    background-color: #CADCFC;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-    min-height: 100vh;
-  }
-  
-  .movie-card-custom {
-    background-color: #3561ac;
-    border-radius: 30px;
-    transition: transform 0.3s ease;
-  }
-  
-  .movie-card-custom:hover {
-    transform: scale(1.03);
-  }
-  
-  .movie-poster {
-    height: 300px;
-    object-fit: cover;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-  }
-  
-  .card-title {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #333;
-  }
-  
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.2rem;
+}
+
+.movie-card {
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to bottom right, #1e3a8a, #3b82f6); /* albastru elegant */
+  color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+  height: 380px;
+}
+
+
+.movie-card:hover {
+  transform: scale(1.02);
+}
+
+.movie-poster-container {
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+}
+
+.movie-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.movie-content {
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.movie-title {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.movie-title-container {
+  text-align: center;
+  width: 100%;
+}
+
+
+.movies-section {
+  width: 100%;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+.showtime-btn {
+  background: linear-gradient(to right, #3b82f6, #60a5fa);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  margin-top: 1rem;
+  width: 100%;
+  transition: background 0.3s ease;
+}
+
+.showtime-btn:hover {
+  background: linear-gradient(to right, #2563eb, #3b82f6);
+}

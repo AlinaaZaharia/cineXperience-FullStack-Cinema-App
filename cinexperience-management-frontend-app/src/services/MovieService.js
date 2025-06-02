@@ -7,6 +7,10 @@ class MovieService{
         return axios.get(BASE_API + "/all");
     }
 
+    getAllMovies() {
+        return axios.get(BASE_API + "/all");
+    }
+
     getMovieById(id){
         return axios.get(BASE_API + "/viewmovie/" + id);
     }
@@ -21,6 +25,10 @@ class MovieService{
 
     insertMovie(movie, userId) {
         return axios.post(`http://localhost:9000/api/cinema/insert?userId=${userId}`, movie);
+    }
+
+    getAllGenres() {
+        return axios.get("http://localhost:9000/api/cinema/genres");
     }
 }
 

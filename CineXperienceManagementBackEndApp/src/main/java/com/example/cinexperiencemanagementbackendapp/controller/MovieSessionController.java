@@ -23,8 +23,8 @@ public class MovieSessionController {
     private MovieSessionRepo sessionRepo;
 
     @PostMapping("/add")
-    public MovieSession addSession(@RequestBody MovieSession session){
-        return movieSessionService.createSession(session);
+    public MovieSession addSession(@RequestBody MovieSession session) {
+        return sessionRepo.save(session);
     }
 
 
@@ -49,6 +49,22 @@ public class MovieSessionController {
         return sessionOpt.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<MovieSession> updateSession(@PathVariable int id, @RequestBody MovieSession session) {
+        return sessionRepo.findById((long) id).map(existing -> {
+            existing.setStartTime(session.getStartTime());
+            existing.setHallName(session.getHallName());
+            return ResponseEntity.ok(sessionRepo.save(existing));
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteSession(@PathVariable int id) {
+        sessionRepo.deleteById((long) id);
+        return ResponseEntity.noContent().build();
+    }
+
 
 
 }

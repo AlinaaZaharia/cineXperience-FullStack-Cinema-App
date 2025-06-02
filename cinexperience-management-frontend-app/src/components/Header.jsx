@@ -62,7 +62,7 @@ class Header extends Component {
                         </a>
 
                         <ul className="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                            <li><a href="/" className="nav-link px-2 text-secondary">Home</a></li>
+                            <li><Link to="/listmovies" className="nav-link px-2 text-white">Home</Link></li>
 
                             {user && (
                                 <li className="nav-item dropdown">
@@ -107,14 +107,26 @@ class Header extends Component {
                                     )}
                                 </li>
                             )}
-
-                            <li><a href="#" className="nav-link px-2 text-white">Genres</a></li>
-                            <li><a href="#" className="nav-link px-2 text-white">FAQs</a></li>
-                            <li><a href="#" className="nav-link px-2 text-white">About</a></li>
                         </ul>
 
                         <div className="text-end">
-                            <Link to="/login" className="btn btn-outline-light me-2">Login</Link>
+                            {!user && window.location.pathname !== "/login" && (
+                                <Link to="/login" className="btn btn-outline-light me-2">Login</Link>
+                            )}
+
+                            {user && (
+                                <button
+                                    className="btn btn-danger"
+                                    onClick={() => {
+                                        localStorage.removeItem("loggedUser");
+                                        localStorage.removeItem("selectedCityId");
+                                        localStorage.removeItem("selectedCityName");
+                                        window.location.href = "/login";
+                                    }}
+                                >
+                                    Logout
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
